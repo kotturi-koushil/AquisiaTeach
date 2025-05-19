@@ -146,6 +146,7 @@ def addQuestions():
         correct_option = request.form.get("correct_option", "").strip()
         subject = request.form.get("subject", "").strip()
         topic = request.form.get("topic", "").strip()
+        exp = request.form.get('Explanation',"").strip()
 
         if not all(
             [
@@ -162,6 +163,8 @@ def addQuestions():
         ):
             flash("All fields are required", "error")
             return redirect(url_for("addQuestions"))
+        
+        print("exp",exp)
 
         conn = None
         curr = None
@@ -171,8 +174,8 @@ def addQuestions():
 
             curr.execute(
                 """INSERT INTO questions 
-                (day, question, option_a, option_b, option_c, option_d, correct_option, subject,topic)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s)""",
+                (day, question, option_a, option_b, option_c, option_d, correct_option, subject,topic,explanation)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s,%s)""",
                 (
                     day,
                     question,
@@ -183,6 +186,7 @@ def addQuestions():
                     correct_option,
                     subject,
                     topic,
+                    exp,
                 ),
             )
             conn.commit()
@@ -213,6 +217,7 @@ def addQuestions1():
         optionD = request.form.get("option_d", "").strip()
         correct_option = request.form.get("correct_option", "").strip()
         subject = request.form.get("subject", "").strip()
+        exp = request.form.get("Explanation","").strip()
 
         if not all(
             [day, question, optionA, optionB, optionC, optionD, correct_option, subject]
@@ -228,8 +233,8 @@ def addQuestions1():
 
             curr.execute(
                 """INSERT INTO sample
-                (day, question, option_a, option_b, option_c, option_d, correct_option, subject)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
+                (day, question, option_a, option_b, option_c, option_d, correct_option, subject,explanation)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s)""",
                 (
                     day,
                     question,
@@ -239,6 +244,7 @@ def addQuestions1():
                     optionD,
                     correct_option,
                     subject,
+                    exp,
                 ),
             )
             conn.commit()
@@ -305,4 +311,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=10000)
+    app.run()
