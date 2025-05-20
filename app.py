@@ -319,11 +319,12 @@ def addSchedule():
         try:
             conn = get_db_connection()
             curr = conn.cursor()
+            total_question = 200
 
             curr.execute(
-                """Insert into  syllabus  values (%s,%s,%s)""",
+                """Insert into  syllabus  values (%s,%s,%s,%s)""",
                 (
-                    day,topic,desc
+                    day,topic,desc,total_question
                 ),
             )
             conn.commit()
