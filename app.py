@@ -263,6 +263,44 @@ def addQuestions1():
 
     return render_template("sample_test.html")
 
+@app.route("/startExam", methods=["GET", "POST"])
+def startExams():
+    if request.method == "POST":
+        day = request.form.get("sarting", "").strip()
+        conn = None
+        curr = None
+        try:
+            conn = get_db_connection()
+            curr = conn.cursor()
+
+            curr.execute(
+                """update syllabus set total_questions_of_day = 1 where day = %s """,
+                (
+                    day,
+                ),
+            )
+            curr.execute("""INSERT INTO last_day (day) VALUES(%s)""",
+                        (
+                             day,
+                        ),
+
+            )
+            conn.commit()
+
+            flash("exam started successfully", "success")
+            return redirect(url_for("startExams"))
+
+        except Exception as e:
+            flash(f"Error adding Schedule: {str(e)}", "error")
+            return redirect(url_for("startExams"))
+        finally:
+            if curr:
+                curr.close()
+            if conn:
+                conn.close()
+
+    return render_template("start.html")
+
 @app.route("/add-schedule", methods=["GET", "POST"])
 def addSchedule():
     if request.method == "POST":
